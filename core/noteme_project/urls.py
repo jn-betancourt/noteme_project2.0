@@ -21,6 +21,8 @@ from django.views.generic import TemplateView
 from django.conf import settings
 
 urlpatterns = [
+    path("api/notes/", include("apps.notes.urls")),
+    path("api/users/", include("apps.users.urls")),
     path("admin/", admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
