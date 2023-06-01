@@ -3,6 +3,9 @@ from rest_framework.views import APIView
 from rest_framework.views import Response
 from rest_framework import status
 
+# DJANGO UTILS
+import django.contrib.auth.hashers as hasher
+
 # MODELS AND SERILIZERS
 from .serializers import UserCreationSerializer, UserRetrieveSerializer
 from .models import Users
@@ -28,10 +31,17 @@ class UserManagement(APIView):
         user = UserRetrieveSerializer(request.data)  # info from QUERYDICT --> DICT
         email = user.data.get("email")
         password = user.data.get("password")
+
         query = Users.objects.filter(email=email).first()  # lookup for the email
 
-        if query and password == query.password:  # if email and password are correct
-            status_message["message"] = "user found"
+        if query and hasher.check_password(password, query.password):  # if email and password are correct
+            status_message = {"user_info": 
+                              {
+                                  "id": query.id,
+                                  "name": query.name,
+                                  "email": query.email
+                               }
+                              }
             status_http = status.HTTP_200_OK
 
         return Response(status_message, status_http)
@@ -54,13 +64,21 @@ class UserManagement(APIView):
         query = Users.objects.filter(email=email).first()  # Check if it is register
 
         if not query:  # If not register --> register new user
-            status_message = {"message": "successful creation"}
-            status_http = status.HTTP_201_CREATED
+            # Create a has of a password for sec porpuses
+            usable_password = hasher.make_password(user_info.data.get("password"))
             new_user = Users.objects.create(
                 email=email,
                 name=user_info.data.get("name"),
-                password=user_info.data.get("password"),
+                password=usable_password,
             )
             new_user.save()
+            status_message = {"user_info": 
+                              {
+                                  "id": Users.objects.filter(email=email).first().id,
+                                  "name": user_info.data.get("name"),
+                                  "email": user_info.data.get("email")
+                               }
+                              }
+            status_http = status.HTTP_201_CREATED
 
         return Response(status_message, status_http)
