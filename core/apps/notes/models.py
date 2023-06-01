@@ -11,7 +11,9 @@ class Notes(models.Model):
 
     title = models.CharField(max_length=30)
     description = models.TextField(max_length=255)
-    user_id = models.ForeignKey(Users, on_delete=models.CASCADE, related_name="user_id")
+    user_id = models.ForeignKey(
+        Users, on_delete=models.DO_NOTHING, related_name="user_id"
+    )
 
     def __str__(self):
         return f"{self.title}\n{self.description}"

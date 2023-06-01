@@ -25,7 +25,7 @@ class UserManagement(APIView):
             format: Body format.
         """
 
-        status_message = {"message": "user email or password wrong"}
+        status_message = {"response": "user email or password wrong"}
         status_http = status.HTTP_404_NOT_FOUND
 
         user = UserRetrieveSerializer(request.data)  # info from QUERYDICT --> DICT
@@ -34,14 +34,12 @@ class UserManagement(APIView):
 
         query = Users.objects.filter(email=email).first()  # lookup for the email
 
-        if query and hasher.check_password(password, query.password):  # if email and password are correct
-            status_message = {"user_info": 
-                              {
-                                  "id": query.id,
-                                  "name": query.name,
-                                  "email": query.email
-                               }
-                              }
+        if query and hasher.check_password(
+            password, query.password
+        ):  # if email and password are correct
+            status_message = {
+                "response": {"id": query.id, "name": query.name, "email": query.email}
+            }
             status_http = status.HTTP_200_OK
 
         return Response(status_message, status_http)
@@ -54,7 +52,7 @@ class UserManagement(APIView):
             format: Body format.
         """
 
-        status_message = {"message": "user email or password wrong"}
+        status_message = {"response": "user email or password wrong"}
         status_http = status.HTTP_406_NOT_ACCEPTABLE
 
         user_info = UserCreationSerializer(
@@ -72,13 +70,13 @@ class UserManagement(APIView):
                 password=usable_password,
             )
             new_user.save()
-            status_message = {"user_info": 
-                              {
-                                  "id": Users.objects.filter(email=email).first().id,
-                                  "name": user_info.data.get("name"),
-                                  "email": user_info.data.get("email")
-                               }
-                              }
+            status_message = {
+                "response": {
+                    "id": Users.objects.filter(email=email).first().id,
+                    "name": user_info.data.get("name"),
+                    "email": user_info.data.get("email"),
+                }
+            }
             status_http = status.HTTP_201_CREATED
 
         return Response(status_message, status_http)

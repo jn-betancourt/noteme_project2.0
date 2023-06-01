@@ -29,8 +29,11 @@ function NavBar(){
               </li>
             </ul>
           </div>
-          <div className="flex justify-center h-1/4 border-t-2 border-grey">
-            <Link to="login">login/logout</Link>
+          <div class="flex flex-col justify-center h-1/4 border-t-2 border-grey">
+            <div className="flex justify-evenly p-2">
+              <Link to="/signin">Sign In!</Link>
+              <Link to="/signup">Sign Up!</Link>
+            </div>
           </div>
         </div>
       </div>

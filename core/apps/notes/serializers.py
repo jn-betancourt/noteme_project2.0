@@ -5,5 +5,4 @@ from .models import *
 class NotesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notes
-        fields = "__all__"
-        exclude = "user_id"
+        fields = ["id", "title", "description"]
