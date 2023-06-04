@@ -26,21 +26,23 @@ class NotesManagement(APIView):
             request: First argument Django http base class provide.
             format: Body format.
         """
+        # generic status messages
         status_message = {"response": "No notes found"}
         status_http = status.HTTP_404_NOT_FOUND
 
-        user_id = request.data.get("id")
+        user_id = request.data.get("id")  # require the id of the user
         query = Notes.objects.filter(user_id=user_id)
         notes = []
-        if query:
-            for note in query:
+
+        if query:  # if user exist
+            for note in query:  # take each note from QUERYSET --> DICT
                 info_note = NotesSerializer(note)
                 nota_format = {
                     "id": info_note.data.get("id"),
                     "title": info_note.data.get("title"),
                     "description": info_note.data.get("description"),
                 }
-                notes.append(nota_format)
+                notes.append(nota_format)  # append the note converted to the list
 
             status_message = {"response": notes}
             status_http = status.HTTP_200_OK
@@ -62,23 +64,23 @@ class NotesManagement(APIView):
 
         action = request.headers.get("action")
 
-        if action == "POST":
-            user_info = NotesSerializer(request.data)
-            query = Users.objects.get(pk=user_info.data.get("id"))
+        if action == "POST":  # if header "action" set to POST
+            note_info = NotesSerializer(request.data)  # gather the note info
+            query = Users.objects.get(pk=note_info.data.get("id"))  # gather user id
 
             if query:
                 new_note = Notes.objects.create(
-                    title=user_info.data.get("title"),
-                    description=user_info.data.get("description"),
+                    title=note_info.data.get("title"),
+                    description=note_info.data.get("description"),
                     user_id=query,
                 )
-                new_note.save()
+                new_note.save()  # save new note
 
                 status_message = {"response": {"id": new_note.id}}
                 status_http = status.HTTP_201_CREATED
 
-        if action == "DELETE":
-            id_note = request.data.get("id")
+        if action == "DELETE":  # if header "action" set to DELETE
+            id_note = request.data.get("id")  # id of the note
             query = Notes.objects.get(pk=id_note)
 
             if query:
@@ -87,8 +89,8 @@ class NotesManagement(APIView):
                 status_message = {"response": {"message": "Note deleted"}}
                 status_http = status.HTTP_200_OK
 
-        if action == "PUT":
-            note_info = NotesSerializer(request.data)
+        if action == "PUT":  # if header "action" set to PUT
+            note_info = NotesSerializer(request.data)  # gather the note new info
             id_note = note_info.data.get("id")
             query = Notes.objects.get(pk=id_note)
 

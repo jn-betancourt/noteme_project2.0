@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.views import Response
 from rest_framework import status
 
-# DJANGO UTILS
+# DJANGO HASHER
 import django.contrib.auth.hashers as hasher
 
 # MODELS AND SERILIZERS
@@ -33,10 +33,9 @@ class UserManagement(APIView):
         password = user.data.get("password")
 
         query = Users.objects.filter(email=email).first()  # lookup for the email
+        check_password = hasher.check_password(password, query.password)
 
-        if query and hasher.check_password(
-            password, query.password
-        ):  # if email and password are correct
+        if query and check_password:  # if email and password are correct
             status_message = {
                 "response": {"id": query.id, "name": query.name, "email": query.email}
             }
@@ -62,7 +61,7 @@ class UserManagement(APIView):
         query = Users.objects.filter(email=email).first()  # Check if it is register
 
         if not query:  # If not register --> register new user
-            # Create a has of a password for sec porpuses
+            # Create a hash of a password for sec porpuses
             usable_password = hasher.make_password(user_info.data.get("password"))
             new_user = Users.objects.create(
                 email=email,
