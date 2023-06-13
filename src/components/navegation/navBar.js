@@ -1,4 +1,3 @@
-import { connect } from 'react-redux';
 import note_me from 'assets/img/note_me.png';
 import {NavLink, Link} from 'react-router-dom';
 
@@ -29,10 +28,10 @@ function NavBar(){
               </li>
             </ul>
           </div>
-          <div class="flex flex-col justify-center h-1/4 border-t-2 border-grey">
+          <div className="flex flex-col justify-center h-1/4 border-t-2 border-grey">
             <div className="flex justify-evenly p-2">
-              <Link to="/signin">Sign In!</Link>
-              <Link to="/signup">Sign Up!</Link>
+              <Link to="/signin">Log in!</Link>
+              <Link to="/signup">Register!</Link>
             </div>
           </div>
         </div>
@@ -41,10 +40,5 @@ function NavBar(){
     return JSX
 }
 
-const mapStateToProps = (state) =>({
 
-})
-
-export default connect(mapStateToProps,{
-
-}) (NavBar);
+export default NavBar;
