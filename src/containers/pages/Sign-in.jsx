@@ -1,12 +1,12 @@
-import SignInForm from "components/login/sign-in";
-import NavBar from "components/navegation/nav-bar";
+import LogInForm from "components/login/logInForm";
+import NavBar from "components/navegation/navBar";
 import Layout from "hocs/Layout";
 
 function SignIn(){
     return (
         <Layout>
             <NavBar/>
-            <SignInForm/>
+            <LogInForm/>
         </Layout>
     )
 }

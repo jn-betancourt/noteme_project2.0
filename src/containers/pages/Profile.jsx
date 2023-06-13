@@ -1,4 +1,4 @@
-import NavBar from "components/navegation/nav-bar";
+import NavBar from "components/navegation/navBar";
 import Layout from "hocs/Layout";
 
 function Profile(){

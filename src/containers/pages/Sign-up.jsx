@@ -1,5 +1,5 @@
-import SignUpForm from "components/login/sign-up";
-import NavBar from "components/navegation/nav-bar";
+import SignUpForm from "components/login/signUpForm";
+import NavBar from "components/navegation/navBar";
 import Layout from "hocs/Layout";
 
 function SignUp(){

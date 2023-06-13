@@ -1,5 +1,3 @@
-import { connect } from 'react-redux';
-
 function Layout({children}){
     return (
         <div className="flex h-screen">
@@ -8,8 +6,4 @@ function Layout({children}){
     )
 }
 
-const mapStateToProps = state =>({
-
-})
-
-export default connect(mapStateToProps,{})(Layout);
+export default Layout;

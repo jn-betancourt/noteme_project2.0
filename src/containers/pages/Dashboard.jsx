@@ -1,5 +1,5 @@
-import NavBar from "components/navegation/nav-bar";
-import NotesLayout from "components/notes/notes-layout";
+import NavBar from "components/navegation/navBar";
+import NotesLayout from "components/notes/notesLayout";
 import Layout from "hocs/Layout";
 
 function Dashboard(){

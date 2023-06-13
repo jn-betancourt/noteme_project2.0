@@ -1,12 +1,14 @@
 # REST FRAMEWORD API UTILS
 from rest_framework.views import APIView, Response, status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 
 # SERIALIZER FOR NOTES
 from .serializers import NotesSerializer
 
 # MODELS FOR NOTES
 from .models import *
-from ..users.models import Users
+from django.contrib.auth.models import User
 
 
 class NotesManagement(APIView):
@@ -15,6 +17,8 @@ class NotesManagement(APIView):
     HTTP methods allowed:
         GET, POST
     """
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
     def get(self, request, format=None):
         """GET method
@@ -27,11 +31,11 @@ class NotesManagement(APIView):
             format: Body format.
         """
         # generic status messages
-        status_message = {"response": "No notes found"}
+        status_message = {"detail": "Authentication credentials were not provided."}
         status_http = status.HTTP_404_NOT_FOUND
 
         user_id = request.data.get("id")  # require the id of the user
-        query = Notes.objects.filter(user_id=user_id)
+        query = Note.objects.filter(user_id=user_id)
         notes = []
 
         if query:  # if user exist
@@ -59,17 +63,17 @@ class NotesManagement(APIView):
             request: First argument Django http base class provide.
             format: Body format.
         """
-        status_message = {"response": "generic post method"}
+        status_message = {"detail": "Authentication credentials were not provided."}
         status_http = status.HTTP_406_NOT_ACCEPTABLE
 
         action = request.headers.get("action")
 
         if action == "POST":  # if header "action" set to POST
             note_info = NotesSerializer(request.data)  # gather the note info
-            query = Users.objects.get(pk=note_info.data.get("id"))  # gather user id
+            query = User.objects.get(pk=note_info.data.get("id"))  # gather user id
 
             if query:
-                new_note = Notes.objects.create(
+                new_note = Note.objects.create(
                     title=note_info.data.get("title"),
                     description=note_info.data.get("description"),
                     user_id=query,
@@ -81,7 +85,7 @@ class NotesManagement(APIView):
 
         if action == "DELETE":  # if header "action" set to DELETE
             id_note = request.data.get("id")  # id of the note
-            query = Notes.objects.get(pk=id_note)
+            query = Note.objects.get(pk=id_note)
 
             if query:
                 query.delete(keep_parents=True)
@@ -92,7 +96,7 @@ class NotesManagement(APIView):
         if action == "PUT":  # if header "action" set to PUT
             note_info = NotesSerializer(request.data)  # gather the note new info
             id_note = note_info.data.get("id")
-            query = Notes.objects.get(pk=id_note)
+            query = Note.objects.get(pk=id_note)
 
             if query:
                 query.title = str(note_info.data.get("title"))

@@ -1,17 +1,18 @@
-import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import rootReducer from './redux/reducers'
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { configureStore } from '@reduxjs/toolkit';
+// import thunk from 'redux-thunk';
+// import rootReducer from './redux/reducers'
+// import { composeWithDevTools } from 'redux-devtools-extension';
 
-const initialState = {};
+import noteReducer from './redux/features/tasks/taskSlice';
 
-const middleware = [thunk];
+// const middleware = [thunk];
 
-const store = createStore(
-    rootReducer,
-    initialState,
-    // applyMiddlware(..middleware),
-    composeWithDevTools(applyMiddleware(...middleware))
+const store = configureStore(
+        {
+            reducer: {
+                notes: noteReducer
+            },
+        }
 );
 
 export default store;

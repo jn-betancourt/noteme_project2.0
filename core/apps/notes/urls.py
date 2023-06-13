@@ -3,5 +3,5 @@ from .views import *
 
 urlpatterns = [
     path("getNotes", NotesManagement.as_view()),
-    path("modNote", NotesManagement.as_view())
+    path("modNote", NotesManagement.as_view()),
 ]
