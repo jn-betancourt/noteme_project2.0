@@ -5,15 +5,19 @@ import { useNavigate, useParams } from 'react-router-dom';
 import {useState, useEffect} from 'react';
 import { v4 as uuid } from "uuid";
 
+import { saveNoteApi, changeNoteApi } from 'api/notes/notesApi';
+
 export default function NotesForm(){
 
     const notes = useSelector( (store) => store.notes);
+    const user = useSelector( (store) => store.user);
     const dispatch = useDispatch();
     const params = useParams();
     const navigate = useNavigate();
 
     const [note, setNote] = useState(
         {
+            note_id: uuid(),
             title: "",
             description: ""
         }
@@ -26,17 +30,18 @@ export default function NotesForm(){
         })
     }
 
-    const onSubmit = (e) => {
-        e.preventDefault();
+    const onSubmit = () => {
         if (params.id){
-            dispatch(changeNote({...note, id: params.id }));
+            const newNote = {...note, note_id: params.id };
+            console.log(newNote);
+            dispatch(changeNote(newNote));
         }
         else{
+            const note_info = {
+                ...note,
+              }
             dispatch(
-                addNote({
-                    ...note,
-                    id: uuid(),
-                  })
+                addNote(note_info)
             )
         }
         navigate("/")
@@ -47,9 +52,39 @@ export default function NotesForm(){
         navigate("/");
     }
 
+    const onSubmitAuth = ()=>{
+        onSubmit();
+        if (params.id){
+            console.log(params.id)
+            modified(params.id);
+        }
+        else{
+            save();
+        }
+    }
+    
+    const save = async ()=>{
+        await saveNoteApi(
+            user.token, 
+            {
+               ...note,
+                id: user.id
+            }
+        )
+    }
+    const modified = async (note_id)=>{
+        await changeNoteApi(
+            user.token,
+            {
+                ...note,
+                note_id: note_id
+            }
+        )
+    }
+
     useEffect(()=>{
             if (params.id){
-                setNote(notes.find((note) => note.id === params.id));
+                setNote(notes.find((note) => note.note_id === params.id));
             }
         }, [params, notes]);
 
@@ -64,7 +99,12 @@ export default function NotesForm(){
                 </div>
                 <div className="flex justify-between p-2">
                     <button className="hover:border-purple-500 hover:border-b-2" onClick={onCancel} id="close">Cancel</button>
-                    <button className="hover:border-purple-500 hover:border-b-2" id="save" onClick={onSubmit}>Save</button>
+                    <button 
+                    className="hover:border-purple-500 hover:border-b-2" 
+                    id="save" 
+                    onClick={user.is_auth
+                            ? onSubmitAuth
+                            : onSubmit }>Save</button>
                 </div>
             </div>
         </div>

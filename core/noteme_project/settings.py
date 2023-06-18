@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 import environ
+from corsheaders.defaults import default_headers
 
 env = environ.Env()
 environ.Env().read_env()
@@ -67,8 +68,8 @@ CKEDITOR_CONFIGS = {
 CKEDITOR_UPLOAD_PATH = "/media/"
 
 MIDDLEWARE = [
-    "django.middleware.csrf.CsrfViewMiddleware",
     "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -163,6 +164,7 @@ REST_FRAMEWOKR = {
 }
 
 CORS_ORIGIN_WHITELIST = env.list("CORS_ORIGIN_WHITELIST_DEV")
+CORS_ALLOW_HEADERS = (*default_headers, *env.tuple("CORS_ALLOW_HEADERS"))
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS_DEV")
 
 if not DEBUG:

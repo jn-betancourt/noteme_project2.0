@@ -9,6 +9,7 @@ class Note(models.Model):
         verbose_name = "Note"
         verbose_name_plural = "Notes"
 
+    note_id = models.CharField(max_length=255)
     title = models.CharField(max_length=30)
     description = models.TextField(max_length=255)
     user_id = models.ForeignKey(

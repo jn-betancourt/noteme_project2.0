@@ -1,9 +1,27 @@
 import note_me from 'assets/img/note_me.png';
 import {NavLink, Link} from 'react-router-dom';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { logOut } from 'redux/features/user/userSlice';
+
 function NavBar(){
-    const JSX = (
-      <div id="side-bar" className="flex flex-col justify-center w-1/5 font-semibold bg-nav-color text-light text-lg">
+
+  const user = useSelector( (store)=>store.user );
+  const dispatch = useDispatch();
+
+  const handleLogOut = () => {
+    dispatch(
+      logOut({
+        username: null,
+        id: null,
+        token: null,
+        is_auth: false
+      })
+    )
+  }
+
+  const JSX = (
+      <div id="side-bar" className="flex flex-col justify-center w-1/6 font-semibold bg-nav-color text-light text-lg">
         <div className="flex flex-col justify-center h-full">
           <div className="flex justify-center h-1/4">
             <div className="bg-light rounded-full px-5 mt-2">
@@ -29,10 +47,17 @@ function NavBar(){
             </ul>
           </div>
           <div className="flex flex-col justify-center h-1/4 border-t-2 border-grey">
-            <div className="flex justify-evenly p-2">
-              <Link to="/signin">Log in!</Link>
-              <Link to="/signup">Register!</Link>
+            {user.is_auth ? (
+              <div className="flex justify-center">
+                <Link to="/signin" onClick={handleLogOut}>Log out</Link>
+              </div>)
+            : (
+              <div className="flex justify-evenly p-2">
+                <Link to="/signin">Log in!</Link>
+                <Link to="/signup">Register!</Link>
             </div>
+            )
+          }
           </div>
         </div>
       </div>

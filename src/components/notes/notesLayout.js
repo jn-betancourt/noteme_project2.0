@@ -4,7 +4,7 @@ import Notes  from './notes';
 function NotesLayout(){
 
     const JSX = (
-        <div className="flex flex-col w-4/5 bg-dark text-light">
+        <div className="flex flex-col w-5/6 bg-dark text-light">
             <div className="h-10 ml-2 mt-2">
                 <button className="hover:bg-nav-color hover:rounded-md">abrir/cerar</button>
             </div>

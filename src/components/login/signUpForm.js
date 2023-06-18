@@ -1,14 +1,16 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { createUser } from 'api/users/usersApi';
+import { useDispatch } from 'react-redux';
+import { logIn } from 'redux/features/user/userSlice';
 
 export default function SignUpForm(){
 
-    // const navigate = Navigate();
-    
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [form, setForm] = useState(
         {
-            name: "",
+            username: "",
             email: "",
             password: ""
         }
@@ -26,8 +28,16 @@ export default function SignUpForm(){
     const handleSubmit = async (e)=>{
         e.preventDefault();
         console.log(form);
-        const res = await createUser(form);
-        console.log(res);
+        await createUser(form)
+        .then(
+            async (response)=>{
+                const data = response.data
+                dispatch(
+                    logIn({...data})
+                );
+                navigate("/");
+            }
+        );
     }
 
     return (
@@ -40,8 +50,8 @@ export default function SignUpForm(){
                         </h1>
                         <form className="md:space-y-6" action="#" method="POST">
                             <div>
-                                <label for="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Name</label>
-                                <input onChange={onChange} type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Jhon" required=""/>
+                                <label for="username" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Name</label>
+                                <input onChange={onChange} type="text" name="name" id="username" className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Jhon" required=""/>
                             </div>
                             <div>
                                 <label for="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
@@ -57,7 +67,7 @@ export default function SignUpForm(){
                             </div>
                             <button type="submit" formMethod="POST" onClick={handleSubmit} className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Create an account</button>
                             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                                Already have an account? <Link to="signin" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Login here</Link>
+                                Already have an account? <Link to="/signin" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Login here</Link>
                             </p>
                         </form>
                     </div>

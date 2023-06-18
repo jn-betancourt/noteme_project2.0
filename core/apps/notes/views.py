@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 
 # SERIALIZER FOR NOTES
-from .serializers import NotesSerializer
+from .serializers import NoteSerializer
 
 # MODELS FOR NOTES
 from .models import *
@@ -17,6 +17,7 @@ class NotesManagement(APIView):
     HTTP methods allowed:
         GET, POST
     """
+
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
@@ -34,15 +35,15 @@ class NotesManagement(APIView):
         status_message = {"detail": "Authentication credentials were not provided."}
         status_http = status.HTTP_404_NOT_FOUND
 
-        user_id = request.data.get("id")  # require the id of the user
-        query = Note.objects.filter(user_id=user_id)
+        user_id = request.headers.get("id")  # require the id of the user
+        query = Note.objects.filter(user_id_id=user_id)
         notes = []
 
         if query:  # if user exist
             for note in query:  # take each note from QUERYSET --> DICT
-                info_note = NotesSerializer(note)
+                info_note = NoteSerializer(note)
                 nota_format = {
-                    "id": info_note.data.get("id"),
+                    "note_id": info_note.data.get("note_id"),
                     "title": info_note.data.get("title"),
                     "description": info_note.data.get("description"),
                 }
@@ -63,48 +64,45 @@ class NotesManagement(APIView):
             request: First argument Django http base class provide.
             format: Body format.
         """
-        status_message = {"detail": "Authentication credentials were not provided."}
+        status_message = {"detail": "Action header not specified."}
         status_http = status.HTTP_406_NOT_ACCEPTABLE
 
         action = request.headers.get("action")
 
         if action == "POST":  # if header "action" set to POST
-            note_info = NotesSerializer(request.data)  # gather the note info
+            note_info = NoteSerializer(
+                request.data, read_only=True
+            )  # gather the note info
             query = User.objects.get(pk=note_info.data.get("id"))  # gather user id
-
-            if query:
-                new_note = Note.objects.create(
-                    title=note_info.data.get("title"),
-                    description=note_info.data.get("description"),
-                    user_id=query,
-                )
-                new_note.save()  # save new note
-
-                status_message = {"response": {"id": new_note.id}}
-                status_http = status.HTTP_201_CREATED
-
-        if action == "DELETE":  # if header "action" set to DELETE
-            id_note = request.data.get("id")  # id of the note
-            query = Note.objects.get(pk=id_note)
-
-            if query:
-                query.delete(keep_parents=True)
-
-                status_message = {"response": {"message": "Note deleted"}}
-                status_http = status.HTTP_200_OK
+            new_note = Note.objects.create(
+                note_id=note_info.data.get("note_id"),
+                title=note_info.data.get("title"),
+                description=note_info.data.get("description"),
+                user_id=query,
+            )
+            new_note.save()  # save new note
+            status_message = {"datail": "note created"}
+            status_http = status.HTTP_201_CREATED
 
         if action == "PUT":  # if header "action" set to PUT
-            note_info = NotesSerializer(request.data)  # gather the note new info
-            id_note = note_info.data.get("id")
-            query = Note.objects.get(pk=id_note)
+            note_info = NoteSerializer(request.data)  # gather the note new info
+            note_id = note_info.data.get("note_id")
+            query = Note.objects.get(note_id=note_id)
 
-            if query:
-                query.title = str(note_info.data.get("title"))
-                query.description = str(note_info.data.get("description"))
+            query.title = str(note_info.data.get("title"))
+            query.description = str(note_info.data.get("description"))
 
-                query.save()
+            query.save()
 
-                status_message = {"response": {"message": "Note modified"}}
-                status_http = status.HTTP_200_OK
+            status_message = {"message": "Note modified"}
+            status_http = status.HTTP_200_OK
+
+        if action == "DELETE":  # if header "action" set to DELETE
+            note_id = request.data.get("note_id")  # id of the note
+            query = Note.objects.get(note_id=note_id)
+            query.delete(keep_parents=True)
+
+            status_message = {"message": "Note deleted"}
+            status_http = status.HTTP_200_OK
 
         return Response(status_message, status_http)

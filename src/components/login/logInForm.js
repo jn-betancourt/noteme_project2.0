@@ -1,8 +1,15 @@
 import { getUser } from "api/users/usersApi";
+import { getNotes } from "api/notes/notesApi";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate, Link  } from "react-router-dom";
+import { logIn } from "redux/features/user/userSlice";
+import { updateState } from "redux/features/tasks/taskSlice";
 
 export default function LogInForm(){
     
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [form, setForm] = useState(
         {
             email: "",
@@ -21,9 +28,30 @@ export default function LogInForm(){
 
     const handleSubmit = async (e)=>{
         e.preventDefault();
-        console.log(form);
-        const res = await getUser(form);
-        console.log(res);
+        await getUser(form)
+        .then(
+            async (response)=>{
+                const data = response.data
+                dispatch(
+                    logIn({...data})
+                );
+                fetchNotes(data.token, data.id);
+                navigate("/");
+            }
+        );
+    }
+
+    const fetchNotes = async (token, id)=>{
+        await getNotes(token, id)
+        .then(
+            res=>{
+                dispatch(
+                    updateState(
+                        res.data.response
+                    )
+                )
+            }
+        )
     }
 
     return (
@@ -45,7 +73,7 @@ export default function LogInForm(){
                             </div>
                             <button onClick={handleSubmit} type="submit" class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign in</button>
                             <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-                                Don't have an account yet? <a href="#" class="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</a>
+                                Don't have an account yet? <Link to="/signup" class="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</Link>
                             </p>
                         </form>
                     </div>

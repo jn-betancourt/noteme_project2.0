@@ -24,7 +24,7 @@ class UserCreation(APIView):
             request: First argument Django http base class provide.
             format: Body format.
         """
-        status_message = {"response": "user email or password wrong"}
+        status_message = {"detail": "user email or password wrong"}
         status_http = status.HTTP_406_NOT_ACCEPTABLE
         user_info = UserCreationSerializer(
             request.data
@@ -45,12 +45,10 @@ class UserCreation(APIView):
             new_user.save()
             token, created = Token.objects.get_or_create(user=new_user)
             status_message = {
-                "response": {
-                    "token": token.key,
-                    "id": User.objects.filter(email=email).first().id,
-                    "name": user_info.data.get("username"),
-                    "email": user_info.data.get("email"),
-                }
+                "token": token.key,
+                "id": User.objects.filter(email=email).first().id,
+                "username": user_info.data.get("username"),
+                "email": user_info.data.get("email"),
             }
             status_http = status.HTTP_200_OK
 
@@ -69,7 +67,7 @@ class UserAuth(APIView):
             request: First argument Django http base class provide.
             format: Body format.
         """
-        status_message = {"response": "user email or password wrong"}
+        status_message = {"detail": "user email or password wrong"}
         status_http = status.HTTP_404_NOT_FOUND
 
         user = UserRetrieveSerializer(request.data)  # info from QUERYDICT --> DICT
@@ -82,12 +80,9 @@ class UserAuth(APIView):
         if query and check_password:  # if email and password are correct
             token = Token.objects.get(user=query)
             status_message = {
-                "response": {
-                    "toke": token.key,
-                    "id": query.id,
-                    "username": query.username,
-                    "email": query.email,
-                }
+                "token": token.key,
+                "id": query.id,
+                "username": query.username,
             }
             status_http = status.HTTP_200_OK
 
