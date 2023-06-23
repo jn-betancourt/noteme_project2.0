@@ -33,8 +33,7 @@ class NotesManagement(APIView):
         """
         # generic status messages
         status_message = {"detail": "Authentication credentials were not provided."}
-        status_http = status.HTTP_404_NOT_FOUND
-
+        status_http = status.HTTP_204_NO_CONTENT
         user_id = request.headers.get("id")  # require the id of the user
         query = Note.objects.filter(user_id_id=user_id)
         notes = []
