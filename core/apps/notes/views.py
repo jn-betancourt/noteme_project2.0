@@ -68,7 +68,6 @@ class NotesManagement(APIView):
         status_http = status.HTTP_406_NOT_ACCEPTABLE
 
         action = request.headers.get("action")
-
         if action == "POST":  # if header "action" set to POST
             note_info = NoteSerializer(
                 request.data, read_only=True

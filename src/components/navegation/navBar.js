@@ -3,6 +3,7 @@ import {NavLink, Link} from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { logOut } from 'redux/features/user/userSlice';
+import { restoreState } from 'redux/features/tasks/taskSlice';
 
 function NavBar(){
 
@@ -17,6 +18,9 @@ function NavBar(){
         token: null,
         is_auth: false
       })
+    );
+    dispatch(
+      restoreState({})
     )
   }
 
