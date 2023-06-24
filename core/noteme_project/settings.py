@@ -30,7 +30,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-PROJECT_APPS = ["apps.notes", "apps.users"]
+PROJECT_APPS = ["apps.notes.apps.NotesConfig", "apps.users.apps.UsersConfig"]
 
 THIRD_PARTY_APP = [
     "corsheaders",
