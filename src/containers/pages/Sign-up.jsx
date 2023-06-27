@@ -1,4 +1,4 @@
-import SignUpForm from "components/login/signUpForm";
+import SignUpForm from "components/forms/signUpForm";
 import NavBar from "components/navegation/navBar";
 import Layout from "hocs/Layout";
 

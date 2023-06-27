@@ -4,6 +4,9 @@ from rest_framework.views import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
+
 # DJANGO HASHER
 import django.contrib.auth.hashers as hasher
 from django.contrib.auth.models import User

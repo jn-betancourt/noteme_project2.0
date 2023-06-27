@@ -7,11 +7,22 @@ const createUser = async (data)=>{
     );
 }
 
-const getUser = async (data)=>{
+const logIn = async (data)=>{
     return axios.post(
         "http://127.0.0.1:8000/api/users/logIn",
         data,
     );
 }
 
-export { createUser, getUser };
+const logOut = async (token)=>{
+    return axios.get(
+        "http://127.0.0.1:8000/api/users/logOut",
+        {
+            headers:{
+                Authorization: "Token "+token
+            },
+        }
+    );
+}
+
+export { createUser, logIn, logOut  };

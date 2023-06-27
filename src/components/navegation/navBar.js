@@ -1,5 +1,5 @@
 import note_me from 'assets/img/note_me.png';
-import {NavLink, Link} from 'react-router-dom';
+import {NavLink, Link, useNavigate} from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { logOut } from 'redux/features/user/userSlice';
@@ -9,8 +9,9 @@ function NavBar(){
 
   const user = useSelector( (store)=>store.user );
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
-  const handleLogOut = () => {
+  const handleLogOut = async () => {
     dispatch(
       logOut({
         username: null,
@@ -22,6 +23,7 @@ function NavBar(){
     dispatch(
       restoreState({})
     )
+    navigate("/signin");
   }
 
   const JSX = (
@@ -53,7 +55,7 @@ function NavBar(){
           <div className="flex flex-col justify-center h-1/4 border-t-2 border-grey">
             {user.is_auth ? (
               <div className="flex justify-center">
-                <Link to="/signin" onClick={handleLogOut}>Log out</Link>
+                <Link onClick={handleLogOut}>Log out</Link>
               </div>)
             : (
               <div className="flex justify-evenly p-2">

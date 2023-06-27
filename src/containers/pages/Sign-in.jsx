@@ -1,4 +1,4 @@
-import LogInForm from "components/login/logInForm";
+import LogInForm from "components/forms/logInForm";
 import NavBar from "components/navegation/navBar";
 import Layout from "hocs/Layout";
 
