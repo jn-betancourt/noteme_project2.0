@@ -9,7 +9,7 @@ function NavBar(){
 
   const user = useSelector( (store)=>store.user );
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleLogOut = async () => {
     dispatch(

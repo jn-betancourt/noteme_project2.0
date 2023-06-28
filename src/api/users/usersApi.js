@@ -14,15 +14,4 @@ const logIn = async (data)=>{
     );
 }
 
-const logOut = async (token)=>{
-    return axios.get(
-        "http://127.0.0.1:8000/api/users/logOut",
-        {
-            headers:{
-                Authorization: "Token "+token
-            },
-        }
-    );
-}
-
-export { createUser, logIn, logOut  };
+export { createUser, logIn };

@@ -35,7 +35,7 @@ export default function LogInForm(){
                 dispatch(
                     saveUser({...data})
                 );
-                fetchNotes(data.token, data.id);
+                await fetchNotes(data.token, data.id);
                 navigate("/");
                 window.location.reload(true);
             }
