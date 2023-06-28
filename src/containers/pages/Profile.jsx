@@ -1,5 +1,5 @@
-import NavBar from "components/navegation/navBar";
-import Layout from "hocs/Layout";
+import NavBar from "../../components/navegation/navBar";
+import Layout from "../../hocs/Layout";
 
 function Profile(){
     return (

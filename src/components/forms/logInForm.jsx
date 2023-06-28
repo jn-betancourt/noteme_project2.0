@@ -1,10 +1,10 @@
-import { logIn } from "api/users/usersApi";
-import { getNotes } from "api/notes/notesApi";
+import { logIn } from "../../api/users/usersApi";
+import { getNotes } from "../../api/notes/notesApi";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, Link  } from "react-router-dom";
-import { logIn as saveUser } from "redux/features/user/userSlice";
-import { updateState } from "redux/features/tasks/taskSlice";
+import { logIn as saveUser } from "../../redux/features/user/userSlice";
+import { updateState } from "../../redux/features/tasks/taskSlice";
 
 export default function LogInForm(){
     

@@ -1,14 +1,14 @@
 import './styles/App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-import Error from 'containers/errors/error';
+import Error from './containers/errors/error';
 
-import Dashboard from 'containers/pages/Dashboard';
-import NotesForm from 'components/notes/NotesForm';
+import Dashboard from './containers/pages/Dashboard';
+import NotesForm from './components/notes/NotesForm';
 
-import Profile from 'containers/pages/Profile';
-import SignIn from 'containers/pages/Sign-in';
-import SignUp from 'containers/pages/Sign-up';
+import Profile from './containers/pages/Profile';
+import SignIn from './containers/pages/Sign-in';
+import SignUp from './containers/pages/Sign-up';
 
 
 function App() {

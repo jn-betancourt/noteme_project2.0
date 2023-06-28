@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { createUser } from 'api/users/usersApi';
+import { createUser } from '../../api/users/usersApi';
 import { useDispatch } from 'react-redux';
-import { logIn } from 'redux/features/user/userSlice';
+import { logIn } from '../../redux/features/user/userSlice';
 
 export default function SignUpForm(){
 

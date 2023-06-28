@@ -1,11 +1,11 @@
-import { addNote, changeNote } from 'redux/features/tasks/taskSlice';
 import { useDispatch,useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import {useState, useEffect} from 'react';
 import { v4 as uuid } from "uuid";
 
-import { saveNoteApi, changeNoteApi } from 'api/notes/notesApi';
+import { addNote, changeNote } from '../../redux/features/tasks/taskSlice';
+import { saveNoteApi, changeNoteApi } from '../../api/notes/notesApi';
 
 export default function NotesForm(){
 

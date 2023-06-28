@@ -1,9 +1,9 @@
-import note_me from 'assets/img/note_me.png';
+import note_me from '../../assets/img/note_me.png';
 import {NavLink, Link, useNavigate} from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { logOut } from 'redux/features/user/userSlice';
-import { restoreState } from 'redux/features/tasks/taskSlice';
+import { logOut } from '../../redux/features/user/userSlice';
+import { restoreState } from '../../redux/features/tasks/taskSlice';
 
 function NavBar(){
 

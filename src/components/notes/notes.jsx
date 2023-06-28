@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
-import { delNote } from "redux/features/tasks/taskSlice";
 import { Link } from 'react-router-dom';
 
-import { delNoteApi } from "api/notes/notesApi";
+import { delNote } from "../../redux/features/tasks/taskSlice";
+import { delNoteApi } from "../../api/notes/notesApi";
 
 function Notes() {
 
