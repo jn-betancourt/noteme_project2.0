@@ -22,7 +22,7 @@ function NavBar(){
     );
     dispatch(
       restoreState({})
-    )
+    );
     navigate("/signin");
   }
 
