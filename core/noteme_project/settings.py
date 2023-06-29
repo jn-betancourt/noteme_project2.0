@@ -104,8 +104,12 @@ WSGI_APPLICATION = "noteme_project.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("NAME"),
+        "USER": os.environ.get("USER"),
+        "PASSWORD": os.environ.get("PASSWORD"),
+        "HOST": os.environ.get("HOST"),
+        "PORT": os.environ.get("PORT"),
     }
 }
 
@@ -165,7 +169,6 @@ REST_FRAMEWOKR = {
 
 CORS_ORIGIN_WHITELIST = env.list("CORS_ORIGIN_WHITELIST_DEV")
 CORS_ALLOW_HEADERS = (*default_headers, *env.tuple("CORS_ALLOW_HEADERS"))
-print(CORS_ALLOW_HEADERS)
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS_DEV")
 
 if not DEBUG:
