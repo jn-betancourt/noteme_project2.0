@@ -34,7 +34,7 @@ class NotesManagement(APIView):
         # generic status messages
         status_message = {"detail": "Authentication credentials were not provided."}
         status_http = status.HTTP_204_NO_CONTENT
-        user_id = request.headers.get("id")  # require the id of the user
+        user_id = request.user.id  # require the id of the user
         query = Note.objects.filter(user_id_id=user_id)
         notes = []
 
@@ -71,7 +71,7 @@ class NotesManagement(APIView):
             note_info = NoteSerializer(
                 request.data, read_only=True
             )  # gather the note info
-            query = User.objects.get(pk=note_info.data.get("id"))  # gather user id
+            query = User.objects.get(pk=request.user.id)  # gather user id
             new_note = Note.objects.create(
                 note_id=note_info.data.get("note_id"),
                 title=note_info.data.get("title"),

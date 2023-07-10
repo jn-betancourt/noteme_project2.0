@@ -34,7 +34,6 @@ class UserCreation(APIView):
         )  # info from  QUERYDICT --> DICT
         email = user_info.data.get("email", None)  # Take the email
         query = User.objects.filter(email=email).first()  # Check if it is register
-
         if not query:  # If not register --> register new user
             # Create a hash of a password for sec porpuses
             usable_password = hasher.make_password(user_info.data.get("password"))
@@ -76,9 +75,8 @@ class UserAuth(APIView):
         user = UserRetrieveSerializer(request.data)  # info from QUERYDICT --> DICT
         email = user.data.get("email")
         password = user.data.get("password")
-
         query = User.objects.get(email=email)  # lookup for the email
-        check_password = hasher.check_password(password, query.password)
+        check_password = hasher.check_password(password, query.password) # check the password
 
         if query and check_password:  # if email and password are correct
             token = Token.objects.get(user=query)
