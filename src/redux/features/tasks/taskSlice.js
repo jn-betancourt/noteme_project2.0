@@ -28,11 +28,13 @@ export const notesSlice = createSlice(
                 }
             },
             updateState: (state, action)=>{
-                action.payload.forEach(
-                    element =>{
-                        state.push(element);
-                    }
-                );
+                if (action.payload){
+                    action.payload.forEach(
+                        element =>{
+                            state.push(element);
+                        }
+                    );
+                }
             },
             restoreState: (state, action)=>{
                 state.splice(0, state.length);
