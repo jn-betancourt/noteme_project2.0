@@ -45,7 +45,7 @@ class UserCreation(APIView):
             )
 
             new_user.save()
-            token, created = Token.objects.get_or_create(user=new_user)
+            token, _ = Token.objects.get_or_create(user=new_user)
             status_message = {
                 "token": token.key,
                 "id": User.objects.filter(email=email).first().id,

@@ -30,7 +30,11 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-PROJECT_APPS = ["apps.notes.apps.NotesConfig", "apps.users.apps.UsersConfig"]
+PROJECT_APPS = [
+    "apps.notes.apps.NotesConfig",
+    "apps.users.apps.UsersConfig",
+    "apps.googleAPI.apps.GoogleapiConfig",
+]
 
 THIRD_PARTY_APP = [
     "corsheaders",
@@ -69,6 +73,8 @@ CKEDITOR_UPLOAD_PATH = "/media/"
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
+    "csp.middleware.CSPMiddleware",
+    "django_referrer_policy.middleware.ReferrerPolicyMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -78,6 +84,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+SITE_ID = 1
 ROOT_URLCONF = "noteme_project.urls"
 
 TEMPLATES = [
@@ -104,15 +111,11 @@ WSGI_APPLICATION = "noteme_project.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("NAME"),
-        "USER": os.environ.get("USER"),
-        "PASSWORD": os.environ.get("PASSWORD"),
-        "HOST": os.environ.get("HOST"),
-        "PORT": os.environ.get("PORT"),
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
     }
 }
-
+print(os.environ.get("DATABASE"))
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -167,6 +170,18 @@ REST_FRAMEWOKR = {
     ],
 }
 
+# REFERRER POLICY
+REFERRER_POLICY = os.environ.get("REFERRER_POLICY")
+
+# CSP CONFIG FOR GOOGLE AUTH
+CSP_DEFAULT_SRC = env.list("CSP_DEFAULT_SRC")
+CSP_IMG_SRC = env.list("CSP_IMG_SRC")
+CSP_CONNECT_SRC = env.list("CSP_CONNECT_SRC")
+CSP_STYLE_SRC = env.list("CSP_STYLE_SRC")
+CSP_SCRIPT_SRC = env.list("CSP_DEFAULT_SRC")
+CSP_FRAME_SRC = env.list("CSP_FRAME_SRC")
+
+# CORS HEADERS AND CRF CONFIG
 CORS_ORIGIN_WHITELIST = env.list("CORS_ORIGIN_WHITELIST_DEV")
 CORS_ALLOW_HEADERS = (*default_headers, *env.tuple("CORS_ALLOW_HEADERS"))
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS_DEV")
