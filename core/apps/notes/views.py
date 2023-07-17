@@ -14,8 +14,8 @@ from django.contrib.auth.models import User
 class NotesManagement(APIView):
     """Base API class for notes management
 
-    HTTP methods allowed:
-        GET, POST
+        HTTP method allowed
+            GET, POST, PUT, DELETE
     """
 
     permission_classes = [IsAuthenticated]
@@ -63,44 +63,64 @@ class NotesManagement(APIView):
             request: First argument Django http base class provide.
             format: Body format.
         """
-        status_message = {"detail": "Action header not specified."}
-        status_http = status.HTTP_406_NOT_ACCEPTABLE
 
-        action = request.headers.get("action")
-        if action == "POST":  # if header "action" set to POST
-            note_info = NoteSerializer(
-                request.data, read_only=True
-            )  # gather the note info
-            query = User.objects.get(pk=request.user.id)  # gather user id
-            new_note = Note.objects.create(
-                note_id=note_info.data.get("note_id"),
-                title=note_info.data.get("title"),
-                description=note_info.data.get("description"),
-                user_id=query,
-            )
-            new_note.save()  # save new note
-            status_message = {"datail": "note created"}
-            status_http = status.HTTP_201_CREATED
+        note_info = NoteSerializer(
+            request.data, read_only=True
+        )  # gather the note info
+        query = User.objects.get(pk=request.user.id)  # gather user id
+        new_note = Note.objects.create(
+            note_id=note_info.data.get("note_id"),
+            title=note_info.data.get("title"),
+            description=note_info.data.get("description"),
+            user_id=query,
+        )
+        new_note.save()  # save new note
+        status_message = {"datail": "note created"}
+        status_http = status.HTTP_201_CREATED
 
-        if action == "PUT":  # if header "action" set to PUT
-            note_info = NoteSerializer(request.data)  # gather the note new info
-            note_id = note_info.data.get("note_id")
-            query = Note.objects.get(note_id=note_id)
+        return Response(status_message, status_http)
+    
+    def put(self, request, format=None):
+        """PUT method
 
-            query.title = str(note_info.data.get("title"))
-            query.description = str(note_info.data.get("description"))
+        HTTP method allowed:
+            PUT
 
-            query.save()
+        Args:
+            request: First argument Django http base class provide.
+            format: Body format.
+        """
 
-            status_message = {"message": "Note modified"}
-            status_http = status.HTTP_200_OK
+        note_info = NoteSerializer(request.data)  # gather the note new info
+        note_id = note_info.data.get("note_id")
+        query = Note.objects.get(note_id=note_id) # retrieve the note store
+        # UPDATE THE NOTE VALUES
+        query.title = str(note_info.data.get("title")) 
+        query.description = str(note_info.data.get("description"))
 
-        if action == "DELETE":  # if header "action" set to DELETE
-            note_id = request.data.get("note_id")  # id of the note
-            query = Note.objects.get(note_id=note_id)
-            query.delete(keep_parents=True)
+        query.save()
 
-            status_message = {"message": "Note deleted"}
-            status_http = status.HTTP_200_OK
+        status_message = {"message": "Note modified"}
+        status_http = status.HTTP_200_OK
+        
+        return Response(status_message, status_http)
+
+    def delete(self, request, format=None):
+        """DELETE method
+
+        HTTP method allowed:
+            DELETE
+
+        Args:
+            request: First argument Django http base class provide.
+            format: Body format.
+        """
+
+        note_id = request.data.get("note_id")  # id of the note
+        query = Note.objects.get(note_id=note_id)
+        query.delete(keep_parents=True) # delete note, prevent del parent
+
+        status_message = {"message": "Note deleted"}
+        status_http = status.HTTP_200_OK
 
         return Response(status_message, status_http)
