@@ -278,4 +278,5 @@ psd
 thumb
 sketch
 
+credentials.json
 # End of https://www.toptal.com/developers/gitignore/api/react,django,python
