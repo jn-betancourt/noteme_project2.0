@@ -1,20 +1,51 @@
+import jwtDecode from "jwt-decode";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { logIn } from "../../redux/features/user/userSlice";
+
 export default function GoogleButton(props) {
-  const renderButton = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const googleSubmit = async (response) => {
+    const info = jwtDecode(response.credential);
+    const data = {
+      email: info.email,
+      username: info.given_name,
+      picture: info.picture,
+      is_verified: info.email_verified,
+      account_provider: "GOOGLE",
+    };
+
+    await props.func(data).then(async (response) => {
+      const data = response.data;
+      dispatch(logIn({ ...data }));
+      if (props.getNotes) {
+        await props.getNotes(data.token);
+        navigate("/");
+        window.location.reload(true);
+      }
+      navigate("/");
+      window.location.reload(true);
+    });
+  };
+
+  useEffect(() => {
     /*global google*/
     google.accounts.id.initialize({
       client_id:
         "387937601630-4qp9i2826864vtld90buqp34rv6k8bh7.apps.googleusercontent.com",
-      callback: props.func,
+      callback: googleSubmit,
     });
-
     setTimeout(() => {
       google.accounts.id.renderButton(
         document.getElementById("google-button"),
         { theme: "outline", size: "large", type: "icon" } // customization attributes
       );
       google.accounts.id.prompt(); // also display the One Tap dialog,
-    }, 2000);
-  };
+    }, 1000);
+  }, []);
 
-  return <div id="google-button">{renderButton()}</div>;
+  return <div id="google-button"></div>;
 }

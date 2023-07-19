@@ -8,6 +8,7 @@ import noteReducer from "./redux/features/tasks/taskSlice";
 import userReducer from "./redux/features/user/userSlice";
 
 let secretKey = "123456789";
+
 const transformFunctions = createTransform(
   (inboundState, key) => {
     return inboundState;
@@ -21,6 +22,7 @@ const transformFunctions = createTransform(
     return outboundState;
   }
 );
+
 const persistConfig = {
   key: "root",
   storage,

@@ -4,7 +4,6 @@ import { createUser } from "../../api/users/usersApi";
 import { registerGoogleUser } from "../../api/google/googleApi";
 import { useDispatch } from "react-redux";
 import { logIn } from "../../redux/features/user/userSlice";
-import jwtDecode from "jwt-decode";
 import GoogleButton from "../socialButtons/googleButton";
 
 export default function SignUpForm() {
@@ -17,6 +16,7 @@ export default function SignUpForm() {
   });
 
   const onChange = (e) => {
+    e.preventDefault();
     setForm({
       ...form,
       [e.target.id]: e.target.value,
@@ -27,24 +27,6 @@ export default function SignUpForm() {
     e.preventDefault();
     console.log(form);
     await createUser(form).then(async (response) => {
-      const data = response.data;
-      dispatch(logIn({ ...data }));
-      navigate("/");
-      window.location.reload(true);
-    });
-  };
-
-  const googleSubmit = async (response) => {
-    const info = jwtDecode(response.credential);
-    const data = {
-      email: info.email,
-      username: info.given_name,
-      picture: info.picture,
-      is_verified: info.email_verified,
-      account_provider: "GOOGLE",
-    };
-    console.log(data);
-    await registerGoogleUser(data).then(async (response) => {
       const data = response.data;
       dispatch(logIn({ ...data }));
       navigate("/");
@@ -135,6 +117,7 @@ export default function SignUpForm() {
               >
                 Create an account
               </button>
+              <GoogleButton func={registerGoogleUser} getNotes={null} />
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Already have an account?{" "}
                 <Link
@@ -145,7 +128,6 @@ export default function SignUpForm() {
                 </Link>
               </p>
             </form>
-            <GoogleButton func={googleSubmit} />
           </div>
         </div>
       </div>
