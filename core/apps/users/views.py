@@ -28,7 +28,7 @@ class UserCreation(APIView):
             format: Body format.
         """
         status_message = {"detail": "user email or password wrong"}
-        status_http = status.HTTP_406_NOT_ACCEPTABLE
+        status_http = status.HTTP_400_BAD_REQUEST
         user_info = UserCreationSerializer(
             request.data
         )  # info from  QUERYDICT --> DICT
@@ -70,7 +70,7 @@ class UserAuth(APIView):
             format: Body format.
         """
         status_message = {"detail": "user email or password wrong"}
-        status_http = status.HTTP_404_NOT_FOUND
+        status_http = status.HTTP_400_BAD_REQUEST
 
         user = UserRetrieveSerializer(request.data)  # info from QUERYDICT --> DICT
         email = user.data.get("email")

@@ -71,6 +71,8 @@ CKEDITOR_CONFIGS = {
 }
 CKEDITOR_UPLOAD_PATH = "/media/"
 
+SECURE_CROSS_ORIGIN_OPENER_POLICY = env.get_value("SECURE_CROSS_ORIGIN_OPENER_POLICY")
+
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "csp.middleware.CSPMiddleware",
@@ -84,7 +86,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-SITE_ID = 1
 ROOT_URLCONF = "noteme_project.urls"
 
 TEMPLATES = [
@@ -115,7 +116,6 @@ DATABASES = {
         "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
     }
 }
-print(os.environ.get("DATABASE"))
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -175,11 +175,11 @@ REFERRER_POLICY = os.environ.get("REFERRER_POLICY")
 
 # CSP CONFIG FOR GOOGLE AUTH
 CSP_DEFAULT_SRC = env.list("CSP_DEFAULT_SRC")
-CSP_IMG_SRC = env.list("CSP_IMG_SRC")
 CSP_CONNECT_SRC = env.list("CSP_CONNECT_SRC")
 CSP_STYLE_SRC = env.list("CSP_STYLE_SRC")
 CSP_SCRIPT_SRC = env.list("CSP_DEFAULT_SRC")
 CSP_FRAME_SRC = env.list("CSP_FRAME_SRC")
+CSP_CONNECT_SRC = env.list("CSP_CONNECT_SRC")
 
 # CORS HEADERS AND CRF CONFIG
 CORS_ORIGIN_WHITELIST = env.list("CORS_ORIGIN_WHITELIST_DEV")

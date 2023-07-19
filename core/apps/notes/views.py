@@ -101,7 +101,7 @@ class NotesManagement(APIView):
         query.save()
 
         status_message = {"message": "Note modified"}
-        status_http = status.HTTP_200_OK
+        status_http = status.HTTP_201_CREATED
         
         return Response(status_message, status_http)
 
