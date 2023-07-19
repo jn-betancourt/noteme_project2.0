@@ -34,12 +34,12 @@ export const notesSlice = createSlice({
         });
       }
     },
-    restoreState: (state, action) => {
+    clearNotes: (state, action) => {
       state.splice(0, state.length);
     },
   },
 });
 
-export const { addNote, delNote, changeNote, updateNotes, restoreState } =
+export const { addNote, delNote, changeNote, updateNotes, clearNotes } =
   notesSlice.actions;
 export default notesSlice.reducer;

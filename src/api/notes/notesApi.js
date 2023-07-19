@@ -25,15 +25,12 @@ const changeNoteApi = (TOKEN, data) => {
 };
 
 const delNoteApi = (TOKEN, data) => {
-  return axios.delete(
-    "http://localhost:8000/api/notes/modNote",
-    { note_id: data },
-    {
-      headers: {
-        Authorization: `Token ${TOKEN}`,
-      },
-    }
-  );
+  return axios.delete("http://localhost:8000/api/notes/modNote", {
+    data: { note_id: data },
+    headers: {
+      Authorization: `Token ${TOKEN}`,
+    },
+  });
 };
 
 export { getNotes, saveNoteApi, changeNoteApi, delNoteApi };

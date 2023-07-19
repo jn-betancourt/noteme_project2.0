@@ -10,10 +10,16 @@ function Notes() {
     const user = useSelector( ( store ) => store.user )
     const dispatch = useDispatch();
 
-    const onDelete = (note_id)=>{
-        dispatch(delNote(note_id));
+    const onDelete = async (note_id)=>{
         if (user.is_auth){
-            delNoteApi(user.token, note_id)
+            await delNoteApi(user.token, note_id)
+            .then(()=>{
+                dispatch(delNote(note_id));
+            }
+            )
+            .catch((exept)=>console.log(exept));
+        }else{
+            dispatch(delNote(note_id));
         }
     }
 
