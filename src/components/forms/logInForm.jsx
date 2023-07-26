@@ -6,7 +6,6 @@ import { useNavigate, Link } from "react-router-dom";
 import { logIn as saveUser } from "../../redux/features/user/userSlice";
 import { updateNotes } from "../../redux/features/tasks/taskSlice";
 import GoogleButton from "../socialButtons/googleButton";
-import { loginGoogleUser } from "../../api/google/googleApi";
 
 export default function LogInForm() {
   const dispatch = useDispatch();
@@ -93,7 +92,7 @@ export default function LogInForm() {
               >
                 Sign in
               </button>
-              <GoogleButton func={loginGoogleUser} getNotes={fetchNotes}/>
+              <GoogleButton getNotes={fetchNotes}/>
               <p class="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don't have an account yet?{" "}
                 <Link

@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logIn } from "../../redux/features/user/userSlice";
+import { loginGoogleUser } from "../../api/google/googleApi";
 
 export default function GoogleButton(props) {
   const dispatch = useDispatch();
@@ -10,22 +11,15 @@ export default function GoogleButton(props) {
 
   const googleSubmit = async (response) => {
     const info = jwtDecode(response.credential);
-    const data = {
-      email: info.email,
-      username: info.given_name,
-      picture: info.picture,
-      is_verified: info.email_verified,
-      account_provider: "GOOGLE",
-    };
-
-    await props.func(data).then(async (response) => {
+    await loginGoogleUser(info).then(async (response) => {
       const data = response.data;
       dispatch(logIn({ ...data }));
+
       if (props.getNotes) {
         await props.getNotes(data.token);
         navigate("/");
         window.location.reload(true);
-      }
+      };
       navigate("/");
       window.location.reload(true);
     });

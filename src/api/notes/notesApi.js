@@ -5,7 +5,7 @@ const getNotes = async (TOKEN) => {
     headers: {
       Authorization: `Token ${TOKEN}`,
     },
-  });
+  }); 
 };
 
 const saveNoteApi = (TOKEN, data) => {
