@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import GoogleRegister, GoogleLogin
+from .views import GoogleLogin, GoogleRegister
 
 urlpatterns = [
     path("register", GoogleRegister.as_view()),

@@ -1,9 +1,9 @@
-# from django.contrib import admin
-# from .models import *
+from django.contrib import admin
+from .models import NotemeUser
 
-# # Register your models here.
+# Register your models here.
 
 
-# @admin.register(User)
-# class UsersAdmin(admin.ModelAdmin):
-#     list_display = ["id", "email", "name"]
+@admin.register(NotemeUser)
+class NotemeUsersAdmin(admin.ModelAdmin):
+    list_display = ["email", "username", "date_joined", "provider"]
