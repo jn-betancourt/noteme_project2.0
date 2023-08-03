@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logIn } from "../../redux/features/user/userSlice";
-import { loginGoogleUser } from "../../api/google/googleApi";
 
 export default function GoogleButton(props) {
   const dispatch = useDispatch();
@@ -11,7 +10,8 @@ export default function GoogleButton(props) {
 
   const googleSubmit = async (response) => {
     const info = jwtDecode(response.credential);
-    await loginGoogleUser(info).then(async (response) => {
+    console.log(info);
+    await props.func(info).then(async (response) => {
       const data = response.data;
       dispatch(logIn({ ...data }));
 
@@ -35,7 +35,7 @@ export default function GoogleButton(props) {
     setTimeout(() => {
       google.accounts.id.renderButton(
         document.getElementById("google-button"),
-        { theme: "outline", size: "large", type: "icon" } // customization attributes
+        { theme: "outline", size: "large", type: "button" } // customization attributes
       );
       google.accounts.id.prompt(); // also display the One Tap dialog,
     }, 1000);

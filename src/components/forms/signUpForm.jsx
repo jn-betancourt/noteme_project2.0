@@ -3,8 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { createUser } from "../../api/users/usersApi";
 import { useDispatch } from "react-redux";
 import { logIn } from "../../redux/features/user/userSlice";
+import { registerGoogle } from "../../api/google/googleApi";
 import GoogleButton from "../socialButtons/googleButton";
-import GithubButton from "../socialButtons/githubButton";
 
 export default function SignUpForm() {
   const navigate = useNavigate();
@@ -94,8 +94,7 @@ export default function SignUpForm() {
                   required=""
                 />
               </div>
-              <div>
-              </div>
+              <div></div>
               <button
                 type="submit"
                 onClick={handleSubmit}
@@ -103,9 +102,8 @@ export default function SignUpForm() {
               >
                 Create an account
               </button>
-              <div className="flex justify-evenly">
-                <GoogleButton getNotes={null} />
-                <GithubButton />
+              <div className="flex justify-center">
+                <GoogleButton getNotes={null} func={registerGoogle} />
               </div>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Already have an account?{" "}

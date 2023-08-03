@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { logIn as saveUser } from "../../redux/features/user/userSlice";
 import { updateNotes } from "../../redux/features/tasks/taskSlice";
+import { loginGoogle } from "../../api/google/googleApi";
 import GoogleButton from "../socialButtons/googleButton";
 
 export default function LogInForm() {
@@ -92,7 +93,9 @@ export default function LogInForm() {
               >
                 Sign in
               </button>
-              <GoogleButton getNotes={fetchNotes}/>
+              <div className="flex justify-center">
+                <GoogleButton getNotes={fetchNotes} func={loginGoogle} />
+              </div>
               <p class="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don't have an account yet?{" "}
                 <Link

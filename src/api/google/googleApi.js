@@ -1,6 +1,13 @@
 import axios from "axios";
 
-const loginGoogleUser = async (data) => {
+const registerGoogle = async (data) => {
+  const res = await axios.post(
+    "http://localhost:8000/api/google/register", 
+    data
+    );
+  return res;
+};
+const loginGoogle = async (data) => {
   const res = await axios.post(
     "http://localhost:8000/api/google/login", 
     data
@@ -8,4 +15,4 @@ const loginGoogleUser = async (data) => {
   return res;
 };
 
-export { loginGoogleUser };
+export { loginGoogle, registerGoogle };
