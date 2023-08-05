@@ -39,7 +39,7 @@ export default function LogInForm() {
 
   const fetchNotes = async (token) => {
     await getNotes(token).then((res) => {
-      dispatch(updateNotes(res.data.response));
+      dispatch(updateNotes(res.data.detail));
     });
   };
 

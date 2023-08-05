@@ -9,7 +9,7 @@ const getNotes = async (TOKEN) => {
 };
 
 const saveNoteApi = (TOKEN, data) => {
-  return axios.post("http://localhost:8000/api/notes/modNote", data, {
+  return axios.post("http://localhost:8000/api/notes/modNotes", data, {
     headers: {
       Authorization: `Token ${TOKEN}`,
     },
@@ -17,7 +17,7 @@ const saveNoteApi = (TOKEN, data) => {
 };
 
 const changeNoteApi = (TOKEN, data) => {
-  return axios.put("http://localhost:8000/api/notes/modNote", data, {
+  return axios.put("http://localhost:8000/api/notes/modNotes", data, {
     headers: {
       Authorization: `Token ${TOKEN}`,
     },
@@ -25,7 +25,7 @@ const changeNoteApi = (TOKEN, data) => {
 };
 
 const delNoteApi = (TOKEN, data) => {
-  return axios.delete("http://localhost:8000/api/notes/modNote", {
+  return axios.delete("http://localhost:8000/api/notes/modNotes", {
     data: { note_id: data },
     headers: {
       Authorization: `Token ${TOKEN}`,
