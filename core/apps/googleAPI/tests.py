@@ -1,5 +1,6 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
+from rest_framework.authtoken.models import Token
 
 from .models import GoogleUsers
 from ..users.models import NotemeUser
@@ -27,17 +28,38 @@ class GoogleUsersTest(TestCase):
             "exp": 1691013031,
             "jti": "bdfee0adec2d5ba350a4c1bf69043a1337",
         }
-        # user = NotemeUser.objects.create(
-        #     email=self.data["email"],
-        #     username=self.data["name"],
-        #     first_name=self.data["given_name"],
-        #     last_name=self.data["family_name"],
-        # )
-        # user.set_unusable_password()
-        # GoogleUsers.objects.create(
-        #     account_id=user, google_id=self.data["sub"], token_id=self.data["jti"]
-        # )
+        self.user = NotemeUser.objects.create(
+            email=self.data["email"],
+            username=self.data["name"],
+            first_name=self.data["given_name"],
+            last_name=self.data["family_name"],
+            provider="GOOGlE",
+        )
+        self.user.set_unusable_password()
+        self.google_user = GoogleUsers.objects.create(
+            account_id=self.user.email,
+            google_id=self.data["sub"],
+            token_id=self.data["jti"],
+        )
 
-    def test_register(self):
+    def test_user_registered(self):
         res = self.client.post("/api/google/register", self.data)
+        self.assertEqual(res.status_code, 400)
+        self.assertEqual(res.data["detail"], "Could not authenticate.")
+
+    def test_login(self):
+        new_data = self.data
+        new_data["jti"] = "bdfee0adec2d5ba"
+        res = self.client.post("/api/google/login", new_data)
+        token = Token.objects.get(user=res.data["email"])
+
         self.assertEqual(res.status_code, 200)
+        self.assertEqual(
+            res.data,
+            {
+                "token": token.key,
+                "username": self.user.username,
+                "email": self.user.email,
+            },
+        )
+        self.assertNotEqual(self.data["jti"], self.google_user.token_id)

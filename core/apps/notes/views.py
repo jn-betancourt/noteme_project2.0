@@ -37,7 +37,7 @@ class NotesManagement(APIView):
         """
 
         # generic status messages
-        status_message = {"detail": "Authentication credentials were not provided."}
+        status_message = {"detail": "No notes to retrieve."}
         status_http = status.HTTP_204_NO_CONTENT
         user_email = request.user.email  # require the email of the user
         query = Note.objects.filter(account=user_email)
@@ -53,7 +53,7 @@ class NotesManagement(APIView):
                 }
                 notes.append(note_format)  # append the note converted to the list
 
-            status_message = {"response": notes}
+            status_message = {"detail": notes}
             status_http = status.HTTP_200_OK
 
         return Response(status_message, status_http)
@@ -107,8 +107,8 @@ class NotesManagement(APIView):
 
         query.save()
 
-        status_message = {"message": "Note modified"}
-        status_http = status.HTTP_201_CREATED
+        status_message = {"detail": "note modified"}
+        status_http = status.HTTP_200_OK
 
         return Response(status_message, status_http)
 
@@ -130,7 +130,7 @@ class NotesManagement(APIView):
         query = Note.objects.get(pk=note_id)
         query.delete(keep_parents=True)  # delete note, prevent del parent
 
-        status_message = {"message": "Note deleted"}
+        status_message = {"detail": "note deleted"}
         status_http = status.HTTP_200_OK
 
         return Response(status_message, status_http)

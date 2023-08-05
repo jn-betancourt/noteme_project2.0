@@ -80,7 +80,7 @@ class GoogleLogin(APIView):
 
             status_message = {
                 "token": token.key,
-                "username": user_info["given_name"],
+                "username": user_info["name"],
                 "email": user_info["email"],
             }
             status_http = status.HTTP_200_OK

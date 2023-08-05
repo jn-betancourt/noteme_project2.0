@@ -1,67 +1,64 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework.authtoken.models import Token
+import django.contrib.auth.hashers as hasher
 
 from .models import Note
-from django.contrib.auth.models import User
+from ..users.models import NotemeUser
 
 # Create your tests here.
 
 
 class NoteTestCase(TestCase):
-    def __init__(self, methodName: str = "runTest") -> None:
-        super().__init__(methodName)
-        self.user = ""
-        self.token = ""
-        self.client = APIClient()
-
     def setUp(self) -> None:
-        self.user = User.objects.create(
-            username="Juan", password="juanito", email="juan@mail.com"
+        self.client = APIClient()
+        self.user = NotemeUser.objects.create(
+            email="juan@mail.com",
+            username="juan08",
+            first_name="Juan",
+            last_name="Betancourt",
+            password=hasher.make_password("juanito"),
         )
-        self.token = Token.objects.get_or_create(user=self.user)[0].key
-        return super().setUp()
+        Note.objects.create(
+            note_id="abc123",
+            title="title",
+            description="description",
+            account=self.user
+        )
+        token = Token.objects.get(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Token {token}")
 
-    def test_get_notes_new_user(self):
-        res = self.client.get(
-            "/api/notes/getNotes",
-            headers={"Authorization": f"Token {self.token}", "id": self.user.id},
-        )
-        self.assertEqual(res.status_code, 204)
+    def test_get(self):
+        res = self.client.get("/api/notes/getNotes")
+        self.assertEqual(res.status_code, 200)
+        # self.assertEqual(res.data["detail"], "No notes to retrieve.")
 
-    def test_CRUD_note(self):
-        post = self.client.post(
-            "/api/notes/modNote",
+    def test_post_note(self):
+        res = self.client.post(
+            "/api/notes/modNotes",
+            {"note_id": "123456", "title": "My note", "description": "my description"},
+        )
+        self.assertEqual(res.status_code, 201)
+        # self.assertEqual(res.data["detail"], "note created")
+
+    def test_update_note(self):
+        res = self.client.put(
+            "/api/notes/modNotes",
             {
-                "note_id": "f13vd5b1sca1651s",
-                "title": "New Note",
-                "description": "description",
-                "id": self.user.id,
+                "note_id": "abc123",
+                "title": "My new note",
+                "description": "my new description",
             },
-            headers={"Authorization": f"Token {self.token}", "action": "POST"},
         )
-        read = self.client.get(
-            "/api/notes/getNotes",
-            headers={"Authorization": f"Token {self.token}", "id": self.user.id},
-        )
-        put = self.client.post(
-            "/api/notes/modNote",
+        self.assertEqual(res.status_code, 200)
+        # self.assertEqual(res.data["detail"], "note modified")
+
+    def test_delete_note(self):
+        res = self.client.delete(
+            "/api/notes/modNotes",
             {
-                "note_id": "f13vd5b1sca1651s",
-                "title": "New Note 2",
-                "description": "description 2",
-                "id": self.user.id,
+                "note_id": "abc123",
             },
-            headers={"Authorization": f"Token {self.token}", "action": "PUT"},
         )
-        remove = self.client.post(
-            "/api/notes/modNote",
-            {
-                "note_id": "f13vd5b1sca1651s",
-            },
-            headers={"Authorization": f"Token {self.token}", "action": "DELETE"},
-        )
-        self.assertEqual(post.status_code, 201)
-        self.assertEqual(read.status_code, 200)
-        self.assertEqual(put.status_code, 200)
-        self.assertEqual(remove.status_code, 200)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.data["detail"], "note deleted")

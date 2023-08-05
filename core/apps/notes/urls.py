@@ -5,5 +5,5 @@ from .views import *
 # Django application. In this case, there are two URL patterns defined:
 urlpatterns = [
     path("getNotes", NotesManagement.as_view()),
-    path("modNote", NotesManagement.as_view()),
+    path("modNotes", NotesManagement.as_view()),
 ]
