@@ -31,9 +31,9 @@ DJANGO_APPS = [
 ]
 
 PROJECT_APPS = [
+    "apps.auth.usersAuth.apps.UsersAuthConfig",
+    "apps.auth.googleAuth.apps.GoogleAuthConfig",
     "apps.notes.apps.NotesConfig",
-    "apps.users.apps.UsersConfig",
-    "apps.googleAPI.apps.GoogleapiConfig",
 ]
 
 THIRD_PARTY_APP = [
@@ -118,7 +118,7 @@ DATABASES = {
 }
 
 # CUSTOM AUTH MODEL
-AUTH_USER_MODEL = "users.NotemeUser"
+AUTH_USER_MODEL = "usersAuth.NotemeUser"
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

@@ -1,5 +1,5 @@
 from django.db import models
-from ..users.models import NotemeUser
+from ..auth.usersAuth.models import NotemeUser
 
 # Create your models here.
 

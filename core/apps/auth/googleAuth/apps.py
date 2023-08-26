@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class GoogleapiConfig(AppConfig):
+class GoogleAuthConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "apps.googleAPI"
+    name = "apps.auth.googleAuth"

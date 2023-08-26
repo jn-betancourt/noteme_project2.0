@@ -8,7 +8,7 @@ from .serializers import NoteSerializer
 
 # MODELS FOR NOTES
 from .models import Note
-from ..users.models import NotemeUser
+from ..auth.usersAuth.models import NotemeUser
 
 
 # The `NotesManagement` class is a base API class for managing notes, allowing users to retrieve,

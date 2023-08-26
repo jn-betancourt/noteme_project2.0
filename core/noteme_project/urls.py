@@ -21,9 +21,9 @@ from django.views.generic import TemplateView
 from django.conf import settings
 
 urlpatterns = [
-    path("api/google/", include("apps.googleAPI.urls")),
+    path("api/google/", include("apps.auth.googleAuth.urls")),
+    path("api/users/", include("apps.auth.usersAuth.urls")),
     path("api/notes/", include("apps.notes.urls")),
-    path("api/users/", include("apps.users.urls")),
     path("admin/", admin.site.urls),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

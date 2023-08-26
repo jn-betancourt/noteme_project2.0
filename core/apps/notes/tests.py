@@ -4,7 +4,7 @@ from rest_framework.authtoken.models import Token
 import django.contrib.auth.hashers as hasher
 
 from .models import Note
-from ..users.models import NotemeUser
+from ..auth.usersAuth.models import NotemeUser
 
 # Create your tests here.
 

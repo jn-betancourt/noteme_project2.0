@@ -3,7 +3,7 @@ from rest_framework.test import APIClient
 from rest_framework.authtoken.models import Token
 
 from .models import GoogleUsers
-from ..users.models import NotemeUser
+from ..usersAuth.models import NotemeUser
 
 # Create your tests here.
 
